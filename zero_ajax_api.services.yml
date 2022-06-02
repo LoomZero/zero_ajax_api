@@ -1,0 +1,4 @@
+services:
+  plugin.manager.zero.ajax:
+    class: Drupal\zero_ajax_api\ZeroAjaxPluginManager
+    parent: default_plugin_manager

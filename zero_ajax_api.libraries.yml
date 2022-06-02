@@ -1,0 +1,7 @@
+comp:
+  js:
+    js/zero.ajax.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - zero_preprocess/comp

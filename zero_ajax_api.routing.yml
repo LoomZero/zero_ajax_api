@@ -1,0 +1,7 @@
+zero_ajax_api:
+  path: '/api/zero/ajax/{id}'
+  defaults:
+    _controller: '\Drupal\zero_ajax_api\Controller\ZeroAjaxAPIController::serve'
+    _title: 'Zero Ajax API Controller'
+  requirements:
+    _permission: 'access content'
