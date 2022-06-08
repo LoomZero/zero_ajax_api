@@ -11,6 +11,7 @@
     "source": "http://cgit.drupalcode.org/zero_ajax_api"
   },
   "require": {
-    "composer/installers": "~1.0"
+    "composer/installers": "~1.0",
+    "loomzero/zero_preprocess": "~0.3"
   }
 }

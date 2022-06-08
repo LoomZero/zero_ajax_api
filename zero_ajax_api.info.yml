@@ -1,6 +1,6 @@
 name: 'Zero Ajax API'
 type: module
-description: 'Bas module for Ajax API'
+description: 'Base module for Ajax API'
 core_version_requirement: 9.*
 package: zero
-version: 0.1.0
+version: 0.1.1
