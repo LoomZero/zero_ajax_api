@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function zero_ajax_api_theme($existing, $type, $theme, $path) {
+  return [
+    'zero_ajax_view' => [
+      'variables' => [
+        'view' => NULL,
+        'display' => NULL,
+        'config' => NULL,
+      ],
+      'pattern' => 'zero_ajax_view__',
+    ],
+  ];
+}

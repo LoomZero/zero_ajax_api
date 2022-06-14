@@ -2,12 +2,22 @@
 
 namespace Drupal\zero_ajax_api;
 
+use Drupal;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\zero_ajax_api\Exception\ZeroAjaxAPIDefinitionException;
 
 abstract class ZeroAjaxBase extends PluginBase implements ZeroAjaxInterface {
 
   protected $paramsDefinitions = NULL;
+  /** @var \Drupal\Core\Render\RendererInterface */
+  protected $renderer = NULL;
+
+  public function render($array) {
+    if ($this->renderer === NULL) {
+      $this->renderer = Drupal::service('renderer');
+    }
+    return $this->renderer->render($array);
+  }
 
   public function getParamDefinitions() {
     if ($this->paramsDefinitions === NULL) {
@@ -30,9 +40,9 @@ abstract class ZeroAjaxBase extends PluginBase implements ZeroAjaxInterface {
         $parts = explode(':', $value);
 
         if (count($parts) === 2) {
-          list($type, $fallback) = $parts;
+          [$type, $fallback] = $parts;
         } else {
-          list($type) = $parts;
+          [$type] = $parts;
           $fallback = NULL;
         }
         $definitions[$key]['_type'] = $type;

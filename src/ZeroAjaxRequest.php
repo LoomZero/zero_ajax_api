@@ -34,6 +34,10 @@ class ZeroAjaxRequest {
   public function castValue($type, $value) {
     if ($value === NULL) return NULL;
     switch ($type) {
+      case 'array':
+        if ($value === NULL) return NULL;
+        if (is_string($value)) return json_decode($value);
+        return $value;
       case 'string':
         return $value . '';
       case 'number':

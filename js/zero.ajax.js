@@ -1,8 +1,9 @@
-(function($) {
+(function() {
   'use strict';
 
   if (Drupal.zero.ajax !== undefined) return;
   Drupal.zero.ajax = {};
+  Drupal.zero.ajax.invokes = {};
 
   /**
    * @callback APIResponseCallback
@@ -42,7 +43,7 @@
    * @returns {string}
    */
   Drupal.zero.ajax.getUrl = function(plugin_id, format) {
-    return '/loom/ajax/' + plugin_id + '?_format=' + (format || 'json');
+    return '/api/zero/ajax/' + plugin_id + '?_format=' + (format || 'json');
   };
 
   /**
@@ -51,9 +52,23 @@
    * @param {APIErrorCallback} errorCallback
    */
   Drupal.zero.ajax.parseResponse = function (response, callback, errorCallback) {
+    if (response.meta.invoke) {
+      for (var index in response.meta.invoke) {
+        if (typeof Drupal.zero.ajax.invokes[response.meta.invoke[index].func] === 'function') {
+          Drupal.zero.ajax.invokes[response.meta.invoke[index].func](response, ...response.meta.invoke[index].params);
+        } else {
+          console.error('[ZERO AJAX::' + response.request.plugin_id + ']: Response try to invoke "' + response.meta.invoke[index].func + '", the invoke is not a function.');
+        }
+      }
+    }
     if (response.meta.error) {
-      console.error('[LOOM AJAX::' + response.request.controller_id + ']: ' + response.data.message);
-      errorCallback(response, response.data, response.meta);
+      var line = '[ZERO AJAX::' + response.request.plugin_id + ']: ';
+      if (response.data.details && response.data.details.type) {
+        line += '(' + response.data.details.type + ') - ';
+      }
+      line += response.data.message;
+      console.error(line);
+      if (errorCallback) errorCallback(response, response.data, response.meta);
     } else {
       callback(response, response.data, response.meta);
     }
@@ -71,6 +86,7 @@
     format = format || 'json';
     errorCallback = errorCallback || null;
     var url = Drupal.zero.ajax.getUrl(plugin_id, format);
+
     var response = {
       request: {
         url: url,
@@ -83,7 +99,6 @@
     switch (format) {
       case 'json':
         jQuery.getJSON(url, data, function(responseData, status, ajax) {
-          console.log(responseData);
           response.data = responseData.data;
           response.meta = responseData.meta;
           response.status = status;
@@ -94,10 +109,9 @@
       case 'ajax':
         var request = Drupal.ajax({url: url, submit: data});
 
-        request.commands.loomAjaxResponse = function(ajax, responseData, status) {
-          console.log(responseData);
-          response.data = responseData.data.data;
-          response.meta = responseData.data.meta;
+        request.commands.zeroAjaxAPICommand = function(ajax, responseData, status) {
+          response.data = responseData.data;
+          response.meta = responseData.meta;
           response.status = status;
           response.ajax = ajax;
           Drupal.zero.ajax.parseResponse(response, callback, errorCallback);
@@ -119,4 +133,25 @@
     }
   };
 
-})(jQuery);
+  Drupal.zero.ajax.invokes.showMessage = function(response, type, message, options) {
+    options = options || {};
+    var item = jQuery('<div class="zero-ajax-message zero-ajax-message--' + type + '">' + message + '<div class="zero-ajax-message__close">X</div></div>');
+    jQuery('body').append(item);
+
+    var close = function() {
+      if (item === null) return;
+      var _item = item;
+      item = null;
+      _item.fadeOut(400, function() {
+        _item.remove();
+      });
+    };
+
+    item.find('.zero-ajax-message__close').on('click', close);
+
+    setTimeout(function() {
+      close();
+    }, options.time || 5000);
+  };
+
+})();

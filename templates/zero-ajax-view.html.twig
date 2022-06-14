@@ -1,0 +1,19 @@
+{{ attach_library('zero_ajax_api/view') }}
+
+{% set zero_ajax_view__empty %}
+  <div class="zero-ajax-view__empty">{% block empty %}No results{% endblock %}</div>
+{% endset %}
+
+{% set zero_ajax_view__load_more %}
+  {% if block('load_more') is defined %}
+    <div class="zero-ajax-view__load-more">{{ block('load_more') }}</div>
+  {% endif %}
+{% endset %}
+
+<div class="zero-ajax-view" data-view="{{ view }}" data-display="{{ display }}"{% if config %} data-config="{{ config|json_encode() }}"{% endif %}>
+  <template class="zero-ajax-view__template-item">{% block item %}<%= content %>{% endblock %}</template>
+  {% block regions %}
+    <div class="zero-ajax-view__content">{{ zero_ajax_view__empty }}{{ content }}</div>
+    {{ zero_ajax_view__load_more }}
+  {% endblock %}
+</div>

@@ -4,3 +4,7 @@ description: 'Base module for Ajax API'
 core_version_requirement: 9.*
 package: zero
 version: 0.1.1
+
+dependencies:
+  - zero_entitywrapper
+  - zero_preprocess

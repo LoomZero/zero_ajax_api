@@ -1,0 +1,11 @@
+.zero-ajax-view--no-remain .zero-ajax-view__load-more {
+  display: none;
+}
+
+.zero-ajax-view__empty {
+  display: none;
+}
+
+.zero-ajax-view--empty .zero-ajax-view__empty {
+  display: initial;
+}

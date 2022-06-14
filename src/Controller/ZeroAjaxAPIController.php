@@ -27,7 +27,8 @@ class ZeroAjaxAPIController extends ControllerBase {
         /** @var \Drupal\zero_ajax_api\ZeroAjaxInterface $plugin */
         $plugin = $manager->createInstance($definition['id'], $definition);
         $request = new ZeroAjaxRequest($definition);
-        $request->setParams(Drupal::request()->query->all(), $plugin->getParamDefinitions());
+        $merge = array_merge(Drupal::request()->request->all(), Drupal::request()->query->all());
+        $request->setParams($merge, $plugin->getParamDefinitions());
         $response = $plugin->response($request);
         if ($response instanceof ZeroAjaxAPIException) {
           return $this->error($response->getMessage(), $response->getCode(), ['type' => $response->getType(), 'info' => $response->getMore()], $response->invoke());
