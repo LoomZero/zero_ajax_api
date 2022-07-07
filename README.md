@@ -1,26 +1,20 @@
-# 1. - Zero AJAX API
+TOC
 
-- [1. - Zero AJAX API](#1---zero-ajax-api)
-- [2. - Install](#2---install)
-- [3. - Update](#3---update)
+- [1. - Install](#1---install)
+- [2. - Update](#2---update)
 
-# 2. - Install 
+# 1. - Install
 
-Add this to your `repositories` in `composer.json`
-
-```json
-{
-    "type": "composer",
-    "url": "https://raw.githubusercontent.com/LoomZero/zero-composer-register/master/"
-}
+```sh
+composer req loomzero/zero_ajax_api
+drush en zero_ajax_api
 ```
 
-Execute:
+Please ensure that the repository `loomzero/zero-composer-register` is known for composer.
+When not see https://github.com/LoomZero/zero-composer-register#1---use
 
-`composer require loomzero/zero_ajax_api`
+# 2. - Update
 
-# 3. - Update
-
-Execute:
-
-`composer update "loomzero/zero_ajax_api"`
+```shell
+composer update loomzero/zero_ajax_api -W
+```
