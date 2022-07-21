@@ -16,6 +16,10 @@ abstract class ZeroAjaxBase extends PluginBase implements ZeroAjaxInterface {
     if ($this->renderer === NULL) {
       $this->renderer = Drupal::service('renderer');
     }
+    $format = Drupal::request()->get('_format', 'json');
+    if ($format === 'json') {
+      return $this->renderer->renderPlain($array);
+    }
     return $this->renderer->render($array);
   }
 
