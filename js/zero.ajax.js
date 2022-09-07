@@ -133,6 +133,23 @@
     }
   };
 
+  /**
+   * @param {Object<string, string>} query 
+   * @param {Object} options 
+   */
+  Drupal.zero.ajax.updateQuery = function(query, options = {}) {
+    const queryValues = [];
+    for (const key in query) {
+      queryValues.push(key + '=' + encodeURIComponent(query[key]));
+    }
+    const hash = window.location.hash.split('?')[0] || '';
+    if (options.push) {
+      history.pushState(null, null, hash + '?' + queryValues.join('&'));
+    } else {
+      history.replaceState(null, null, hash + '?' + queryValues.join('&'));
+    }
+  };
+
   Drupal.zero.ajax.invokes.showMessage = function(response, type, message, options) {
     options = options || {};
     var item = jQuery('<div class="zero-ajax-message zero-ajax-message--' + type + '">' + message + '<div class="zero-ajax-message__close">X</div></div>');
@@ -152,6 +169,10 @@
     setTimeout(function() {
       close();
     }, options.time || 5000);
+  };
+
+  Drupal.zero.ajax.invokes.updateQuery = function (response, query, options = {}) {
+    Drupal.zero.ajax.updateQuery(query, options);
   };
 
 })();
