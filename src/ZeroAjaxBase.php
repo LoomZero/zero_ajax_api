@@ -4,6 +4,7 @@ namespace Drupal\zero_ajax_api;
 
 use Drupal;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\Render\RenderableInterface;
 use Drupal\zero_ajax_api\Exception\ZeroAjaxAPIDefinitionException;
 
 abstract class ZeroAjaxBase extends PluginBase implements ZeroAjaxInterface {
@@ -16,6 +17,11 @@ abstract class ZeroAjaxBase extends PluginBase implements ZeroAjaxInterface {
     if ($this->renderer === NULL) {
       $this->renderer = Drupal::service('renderer');
     }
+
+    if ($array instanceof RenderableInterface) {
+      $array = $array->toRenderable();
+    }
+
     $format = Drupal::request()->get('_format', 'json');
     if ($format === 'json') {
       return $this->renderer->renderPlain($array);
