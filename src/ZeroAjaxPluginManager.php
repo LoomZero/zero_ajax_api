@@ -9,7 +9,7 @@ use Drupal\Core\Plugin\DefaultPluginManager;
 class ZeroAjaxPluginManager extends DefaultPluginManager {
 
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
-    parent::__construct('Plugin/ZeroAjax', $namespaces, $module_handler,
+    parent::__construct('Plugin/Zero/Ajax', $namespaces, $module_handler,
       'Drupal\zero_ajax_api\ZeroAjaxInterface',
       'Drupal\zero_ajax_api\Annotation\ZeroAjax');
 
