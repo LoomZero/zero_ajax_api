@@ -2,6 +2,22 @@
   'use strict';
 
   if (Drupal.zero.ajax !== undefined) return;
+
+  /**
+   * @param {string} plugin_id
+   * @param {object} data
+   * @param {string} format cache support is only with "json" format available, attachments support is only with "ajax" format available
+   * @param {APIResponseCallback} callback
+   * @param {APIErrorCallback} errorCallback
+   * @param {boolean} attach
+   */
+  window.ZeroComponent.prototype.request = function request(plugin_id, data, format, callback, errorCallback, attach = true) {
+    return Drupal.zero.ajax.request(plugin_id, data, format, (...args) => {
+      callback(...args);
+      if (attach) Drupal.attachBehaviors(this.item.get(0));
+    }, errorCallback);
+  };
+
   Drupal.zero.ajax = {};
   Drupal.zero.ajax.invokes = {};
 
@@ -134,8 +150,8 @@
   };
 
   /**
-   * @param {Object<string, string>} query 
-   * @param {Object} options 
+   * @param {Object<string, string>} query
+   * @param {Object} options
    */
   Drupal.zero.ajax.updateQuery = function(query, options = {}) {
     const queryValues = [];
