@@ -159,10 +159,11 @@
       queryValues.push(key + '=' + encodeURIComponent(query[key]));
     }
     const hash = window.location.hash.split('?')[0] || '';
+    const state = { ident: 'ajax.query.update', ...(options.state || {}) };
     if (options.push) {
-      history.pushState(null, null, hash + '?' + queryValues.join('&'));
+      history.pushState(state, null, hash + '?' + queryValues.join('&'));
     } else {
-      history.replaceState(null, null, hash + '?' + queryValues.join('&'));
+      history.replaceState(state, null, hash + '?' + queryValues.join('&'));
     }
   };
 
